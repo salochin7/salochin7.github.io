@@ -147,25 +147,74 @@
       gap: 12px;
       margin-bottom: 14px;
       align-items: center;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
     }
 
     .track img {
       width: 60px;
       height: 60px;
       border-radius: 6px;
+      object-fit: cover;
+      flex-shrink: 0;
     }
 
     .track-info {
       flex: 1;
+      text-align: left;
     }
 
     .track-title {
       font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .track-title a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .track-title a:hover {
+      color: #ff7a33;
     }
 
     .track-date {
       font-size: 0.8rem;
       opacity: 0.6;
+      margin-bottom: 8px;
+    }
+
+    .track-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .play-btn {
+      background: linear-gradient(135deg, #ff5500, #ff7a33);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .play-btn:hover {
+      opacity: 0.92;
+    }
+
+    .player-slot {
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .player-slot iframe {
+      width: 100%;
+      height: 166px;
+      border: none;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -219,13 +268,42 @@ window.addEventListener("DOMContentLoaded", () => {
   const limit = 10;
   let loading = false;
   let hasMore = true;
+  let activePlayer = null;
 
   const container = document.getElementById("tracks");
   const loadingEl = document.getElementById("loading");
 
   if (!container || !loadingEl) {
-    console.error("Missing #tracks or #loading element.", { container, loadingEl });
+    console.error("Missing #tracks or #loading element.");
     return;
+  }
+
+  function makeEmbedUrl(trackUrl) {
+    const encoded = encodeURIComponent(trackUrl);
+    return `https://w.soundcloud.com/player/?url=${encoded}&color=%23ff5500&auto_play=true&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true`;
+  }
+
+  function openPlayer(track, slot) {
+    if (activePlayer && activePlayer !== slot) {
+      activePlayer.innerHTML = "";
+    }
+
+    const isOpen = slot.innerHTML.trim() !== "";
+
+    if (isOpen) {
+      slot.innerHTML = "";
+      if (activePlayer === slot) activePlayer = null;
+      return;
+    }
+
+    slot.innerHTML = `
+      <iframe
+        allow="autoplay"
+        src="${makeEmbedUrl(track.permalink_url)}">
+      </iframe>
+    `;
+
+    activePlayer = slot;
   }
 
   async function loadTracks() {
@@ -240,25 +318,47 @@ window.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const data = await res.json();
+
       if (!data.tracks || !Array.isArray(data.tracks)) {
         throw new Error("Invalid API response");
+      }
+
+      if (data.tracks.length === 0 && offset === 0) {
+        loadingEl.textContent = "No tracks found.";
+        hasMore = false;
+        loading = false;
+        return;
       }
 
       data.tracks.forEach(track => {
         const el = document.createElement("div");
         el.className = "track";
 
+        const artwork = track.artwork_url || "https://via.placeholder.com/60?text=%E2%99%AA";
+        const dateText = track.created_at
+          ? new Date(track.created_at).toLocaleDateString()
+          : "Unknown date";
+
         el.innerHTML = `
-          <img src="${track.artwork_url || ""}" alt="${track.title}">
+          <img src="${artwork}" alt="${track.title}">
           <div class="track-info">
             <div class="track-title">
               <a href="${track.permalink_url}" target="_blank" rel="noopener noreferrer">${track.title}</a>
             </div>
-            <div class="track-date">
-              ${track.created_at ? new Date(track.created_at).toLocaleDateString() : ""}
+            <div class="track-date">${dateText}</div>
+            <div class="track-actions">
+              <button class="play-btn" type="button">Play</button>
             </div>
+            <div class="player-slot"></div>
           </div>
         `;
+
+        const button = el.querySelector(".play-btn");
+        const playerSlot = el.querySelector(".player-slot");
+
+        button.addEventListener("click", () => {
+          openPlayer(track, playerSlot);
+        });
 
         container.appendChild(el);
       });
