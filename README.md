@@ -1,1 +1,0 @@
-# salochin7.github.io
