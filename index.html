@@ -359,7 +359,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const img = document.createElement("img");
   img.src = artwork;
   img.alt = track.title || "Track artwork";
-
+  img.onerror = () => {
+    img.src = "/images/Placeholder.jpg";
+  }
   const info = document.createElement("div");
   info.className = "track-info";
 
