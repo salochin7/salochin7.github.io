@@ -188,91 +188,96 @@
         🍺 Beer me
       </a>
     </div>
-<script>
-const API_URL = "https://project-mwaqf.vercel.app/api/tracks"; // replace this
-
-let offset = 0;
-const limit = 10;
-let loading = false;
-let hasMore = true;
-
-const container = document.getElementById("tracks");
-const loadingEl = document.getElementById("loading");
-
-async function loadTracks() {
-  if (loading || !hasMore) return;
-
-  loading = true;
-  loadingEl.style.display = "block";
-
-  try {
-    const res = await fetch(`${API_URL}?offset=${offset}&limit=${limit}`);
-    const data = await res.json();
-
-    data.tracks.forEach(track => {
-      const el = document.createElement("div");
-      el.className = "track";
-
-      el.innerHTML = `
-        <img src="${track.artwork_url || ''}" />
-        <div class="track-info">
-          <div class="track-title">
-            <a href="${track.permalink_url}" target="_blank">${track.title}</a>
-          </div>
-          <div class="track-date">
-            ${new Date(track.created_at).toLocaleDateString()}
-          </div>
-        </div>
-      `;
-
-      container.appendChild(el);
-    });
-
-    offset += limit;
-    hasMore = data.hasMore;
-
-    if (!hasMore) {
-      loadingEl.innerText = "No more tracks";
-    }
-
-  } catch (err) {
-    console.error(err);
-    loadingEl.innerText = "Error loading tracks";
-  }
-
-  loading = false;
-}
-
-// infinite scroll
-window.addEventListener("scroll", () => {
-  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
-    loadTracks();
-  }
-});
-
-// initial load
-loadTracks();
-</script>
     <div class="release">
       <h2>Latest Release</h2>
       <div class="sc-wrapper">
-      <iframe
-        allow="autoplay"
-        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/anicable/Rings&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true">
-      </iframe>
+        <iframe
+          allow="autoplay"
+          src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/anicable/Rings&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true">
+        </iframe>
       </div>
-   </div>
+    </div>
 
-   <div class="release">
-  <h2>All Tracks</h2>
-  <div id="tracks"></div>
-  <div id="loading" style="text-align:center; padding:10px; opacity:0.7;">
-    Loading...
+    <div class="release">
+      <h2>All Tracks</h2>
+      <div id="tracks"></div>
+      <div id="loading" style="text-align:center; padding:10px; opacity:0.7;">
+        Loading...
+      </div>
+    </div>
   </div>
-</div>
-  </div>
+
   <footer>
-  <span>© 2026 Nicholas Noranbrock. All rights reserved.</span>
-</footer>
+    <span>© 2026 Nicholas Noranbrock. All rights reserved.</span>
+  </footer>
+
+  <script>
+    const API_URL = "https://project-mwaqf.vercel.app/api/tracks";
+
+    let offset = 0;
+    const limit = 10;
+    let loading = false;
+    let hasMore = true;
+
+    const container = document.getElementById("tracks");
+    const loadingEl = document.getElementById("loading");
+
+    async function loadTracks() {
+      if (!container || !loadingEl) {
+        console.error("Missing #tracks or #loading element.");
+        return;
+      }
+
+      if (loading || !hasMore) return;
+
+      loading = true;
+      loadingEl.style.display = "block";
+
+      try {
+        const res = await fetch(`${API_URL}?offset=${offset}&limit=${limit}`);
+        const data = await res.json();
+
+        data.tracks.forEach(track => {
+          const el = document.createElement("div");
+          el.className = "track";
+
+          el.innerHTML = `
+            <img src="${track.artwork_url || ''}" alt="${track.title}">
+            <div class="track-info">
+              <div class="track-title">
+                <a href="${track.permalink_url}" target="_blank" rel="noopener noreferrer">${track.title}</a>
+              </div>
+              <div class="track-date">
+                ${new Date(track.created_at).toLocaleDateString()}
+              </div>
+            </div>
+          `;
+
+          container.appendChild(el);
+        });
+
+        offset += data.tracks.length;
+        hasMore = data.hasMore;
+
+        if (!hasMore) {
+          loadingEl.innerText = "No more tracks";
+        }
+      } catch (err) {
+        console.error(err);
+        loadingEl.innerText = "Error loading tracks";
+      }
+
+      loading = false;
+    }
+
+    window.addEventListener("scroll", () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+        loadTracks();
+      }
+    });
+
+    loadTracks();
+  </script>
 </body>
+
 </html>
