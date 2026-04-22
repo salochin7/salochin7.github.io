@@ -218,6 +218,25 @@
       border: none;
       border-radius: 10px;
     }
+        .track {
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .track:hover {
+      background: rgba(255,255,255,0.07);
+      transform: translateY(-1px);
+    }
+        .track::before {
+      content: "▶";
+      font-size: 1.2rem;
+      margin-right: 6px;
+      opacity: 0.6;
+    }
+
+    .track:hover::before {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -355,10 +374,26 @@ window.addEventListener("DOMContentLoaded", () => {
         `;
 
         const button = el.querySelector(".play-btn");
+        const link = el.querySelector("a");
         const playerSlot = el.querySelector(".player-slot");
 
-        button.addEventListener("click", () => {
+        // Whole track click
+        el.addEventListener("click", (e) => {
+          // Prevent clicks on button or link from triggering row click
+          if (e.target.closest(".play-btn") || e.target.closest("a")) return;
+
           openPlayer(track, playerSlot);
+        });
+
+        // Button still works
+        button.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openPlayer(track, playerSlot);
+        });
+
+        // Link should not trigger player
+        link.addEventListener("click", (e) => {
+          e.stopPropagation();
         });
 
         container.appendChild(el);
