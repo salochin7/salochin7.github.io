@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anicable Studios</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+      background-color: #050816;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1.5px 1.5px at 80px 120px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1.8px 1.8px at 140px 60px, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1.2px 1.2px at 200px 150px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 260px 40px, rgba(255,255,255,0.85), transparent),
+        radial-gradient(1.4px 1.4px at 320px 100px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1.7px 1.7px at 400px 180px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1.3px 1.3px at 500px 70px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 620px 140px, rgba(255,255,255,0.85), transparent),
+        radial-gradient(1.2px 1.2px at 720px 40px, rgba(255,255,255,0.75), transparent);
+      background-size: 800px 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 700px;
+      background: rgba(10, 14, 30, 0.88);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0,0,0,0.35);
+      backdrop-filter: blur(4px);
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+    }
+    @media (max-width: 500px) {
+    .links {
+        grid-template-columns: 1fr;
+    }
+    }
+    .links a {
+      display: block;
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(135deg, #161b33, #1f2748);
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .links a:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #ff5500, #ff7a33);
+    }
+
+    .release {
+      margin-top: 10px;
+      text-align: left;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .release h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 166px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .note {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+    }
+    .soundContainer g-box-full {
+      background-color: black;
+    }
+    .sc-wrapper iframe {
+      opacity: 0.9;
+      border-radius: 10px;
+    }
+
+    .release {
+      background: rgba(0,0,0,0.4);
+    }
+        footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    pointer-events: none; /* so it doesn't block clicks */
+    }
+
+    footer span {
+    background: rgba(0,0,0,0.4);
+    padding: 6px 12px;
+    border-radius: 8px;
+    backdrop-filter: blur(3px);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>ANICABLE</h1>
+    <p>Music and games.</p>
+
+    <div class="links">
+      <a href="https://soundcloud.com/anicable" target="_blank" rel="noopener noreferrer">
+        🎵 SoundCloud
+      </a>
+      <a href="https://phaser.anicable.com" target="_blank" rel="noopener noreferrer">
+        🚀 Play Phaser
+      </a>
+    </div>
+
+    <div class="release">
+      <h2>Latest Release</h2>
+      <div class="sc-wrapper">
+      <iframe
+        allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/anicable/Rings&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true">
+      </iframe>
+      </div>
+   </div>
+  </div>
+  <footer>
+  <span>© 2026 Nicholas Noranbrock. All rights reserved.</span>
+</footer>
+</body>
+</html>
