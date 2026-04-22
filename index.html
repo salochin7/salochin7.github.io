@@ -342,12 +342,11 @@ window.addEventListener("DOMContentLoaded", () => {
         el.innerHTML = `
           <img src="${artwork}" alt="${track.title}">
           <div class="track-info">
-            <div class="track-title">
-              <a href="${track.permalink_url}" target="_blank" rel="noopener noreferrer">${track.title}</a>
-            </div>
+            <div class="track-title">${track.title}</div>
             <div class="track-date">${dateText}</div>
             <div class="track-actions">
               <button class="play-btn" type="button">Play</button>
+              <a href="${track.permalink_url}" target="_blank" rel="noopener noreferrer">Open in SoundCloud</a>
             </div>
             <div class="player-slot"></div>
           </div>
