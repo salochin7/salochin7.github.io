@@ -199,12 +199,12 @@
     </div>
 
     <div class="release">
-      <h2>All Tracks</h2>
-      <div id="tracks"></div>
-      <div id="loading" style="text-align:center; padding:10px; opacity:0.7;">
-        Loading...
-      </div>
-    </div>
+  <h2>All Tracks</h2>
+  <div id="tracks"></div>
+  <div id="loading" style="text-align:center; padding:10px; opacity:0.7;">
+    Loading...
+  </div>
+</div>
   </div>
 
   <footer>
@@ -212,72 +212,77 @@
   </footer>
 
   <script>
-    const API_URL = "https://project-mwaqf.vercel.app/api/tracks";
+window.addEventListener("DOMContentLoaded", () => {
+  const API_URL = "https://project-mwaqf.vercel.app/api/tracks";
 
-    let offset = 0;
-    const limit = 10;
-    let loading = false;
-    let hasMore = true;
+  let offset = 0;
+  const limit = 10;
+  let loading = false;
+  let hasMore = true;
 
-    const container = document.getElementById("tracks");
-    const loadingEl = document.getElementById("loading");
+  const container = document.getElementById("tracks");
+  const loadingEl = document.getElementById("loading");
 
-    async function loadTracks() {
-      if (!container || !loadingEl) {
-        console.error("Missing #tracks or #loading element.");
-        return;
+  if (!container || !loadingEl) {
+    console.error("Missing #tracks or #loading element.", { container, loadingEl });
+    return;
+  }
+
+  async function loadTracks() {
+    if (loading || !hasMore) return;
+
+    loading = true;
+    loadingEl.style.display = "block";
+    loadingEl.textContent = "Loading...";
+
+    try {
+      const res = await fetch(`${API_URL}?offset=${offset}&limit=${limit}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const data = await res.json();
+      if (!data.tracks || !Array.isArray(data.tracks)) {
+        throw new Error("Invalid API response");
       }
 
-      if (loading || !hasMore) return;
+      data.tracks.forEach(track => {
+        const el = document.createElement("div");
+        el.className = "track";
 
-      loading = true;
-      loadingEl.style.display = "block";
-
-      try {
-        const res = await fetch(`${API_URL}?offset=${offset}&limit=${limit}`);
-        const data = await res.json();
-
-        data.tracks.forEach(track => {
-          const el = document.createElement("div");
-          el.className = "track";
-
-          el.innerHTML = `
-            <img src="${track.artwork_url || ''}" alt="${track.title}">
-            <div class="track-info">
-              <div class="track-title">
-                <a href="${track.permalink_url}" target="_blank" rel="noopener noreferrer">${track.title}</a>
-              </div>
-              <div class="track-date">
-                ${new Date(track.created_at).toLocaleDateString()}
-              </div>
+        el.innerHTML = `
+          <img src="${track.artwork_url || ""}" alt="${track.title}">
+          <div class="track-info">
+            <div class="track-title">
+              <a href="${track.permalink_url}" target="_blank" rel="noopener noreferrer">${track.title}</a>
             </div>
-          `;
+            <div class="track-date">
+              ${track.created_at ? new Date(track.created_at).toLocaleDateString() : ""}
+            </div>
+          </div>
+        `;
 
-          container.appendChild(el);
-        });
+        container.appendChild(el);
+      });
 
-        offset += data.tracks.length;
-        hasMore = data.hasMore;
-
-        if (!hasMore) {
-          loadingEl.innerText = "No more tracks";
-        }
-      } catch (err) {
-        console.error(err);
-        loadingEl.innerText = "Error loading tracks";
-      }
-
-      loading = false;
+      offset += data.tracks.length;
+      hasMore = Boolean(data.hasMore);
+      loadingEl.textContent = hasMore ? "Scroll for more..." : "No more tracks";
+    } catch (err) {
+      console.error("Error loading tracks:", err);
+      loadingEl.textContent = "Error loading tracks";
     }
 
-    window.addEventListener("scroll", () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
-        loadTracks();
-      }
-    });
+    loading = false;
+  }
 
-    loadTracks();
-  </script>
+  window.addEventListener("scroll", () => {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+      loadTracks();
+    }
+  });
+
+  loadTracks();
+});
+</script>
 </body>
 
 </html>
