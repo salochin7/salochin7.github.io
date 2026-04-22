@@ -144,12 +144,13 @@
     }
         .track {
       display: flex;
+      align-items: center; /* center vertically */
       gap: 12px;
       margin-bottom: 14px;
-      align-items: flex-start; /* 👈 key change */
       padding: 10px;
       border-radius: 10px;
       background: rgba(255,255,255,0.03);
+      cursor: pointer;
     }
 
     .track img {
@@ -160,10 +161,9 @@
       flex-shrink: 0;
     }
 
-    .track-info {
+        .track-info {
       flex: 1;
       text-align: left;
-      min-width: 0;
     }
 
     .track-title {
@@ -192,19 +192,25 @@
       margin-top: 6px;
     }
 
-    .play-btn {
+        .play-btn {
       background: linear-gradient(135deg, #ff5500, #ff7a33);
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 6px 10px;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1rem;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 0.85rem;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s ease, opacity 0.1s ease;
     }
 
     .play-btn:hover {
-      opacity: 0.92;
+      transform: scale(1.05);
+      opacity: 0.9;
     }
 
     .player-slot {
@@ -365,16 +371,12 @@ window.addEventListener("DOMContentLoaded", () => {
           <div class="track-info">
             <div class="track-title">${track.title}</div>
             <div class="track-date">${dateText}</div>
-            <div class="track-actions">
-              <button class="play-btn">▶ Play</button>
-              <a href="${track.permalink_url}" target="_blank" rel="noopener noreferrer">Open in SoundCloud</a>
-            </div>
+            <button class="play-btn">▶</button>
             <div class="player-slot"></div>
           </div>
         `;
 
         const button = el.querySelector(".play-btn");
-        const link = el.querySelector("a");
         const playerSlot = el.querySelector(".player-slot");
 
         // Whole track click
@@ -391,10 +393,6 @@ window.addEventListener("DOMContentLoaded", () => {
           openPlayer(track, playerSlot);
         });
 
-        // Link should not trigger player
-        link.addEventListener("click", (e) => {
-          e.stopPropagation();
-        });
 
         container.appendChild(el);
       });
