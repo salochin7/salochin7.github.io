@@ -358,44 +358,57 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       data.tracks.forEach(track => {
-        const el = document.createElement("div");
-        el.className = "track";
+  const el = document.createElement("div");
+  el.className = "track";
 
-        const artwork = track.artwork_url || "https://via.placeholder.com/60?text=%E2%99%AA";
-        const dateText = track.created_at
-          ? new Date(track.created_at).toLocaleDateString()
-          : "Unknown date";
+  const artwork = track.artwork_url || "https://via.placeholder.com/60?text=%E2%99%AA";
+  const dateText = track.created_at
+    ? new Date(track.created_at).toLocaleDateString()
+    : "Unknown date";
 
-        el.innerHTML = `
-          <img src="${artwork}" alt="${track.title}">
-          <div class="track-info">
-            <div class="track-title">${track.title}</div>
-            <div class="track-date">${dateText}</div>
-            <button class="play-btn"></button>
-            <div class="player-slot"></div>
-          </div>
-        `;
+  const img = document.createElement("img");
+  img.src = artwork;
+  img.alt = track.title || "Track artwork";
 
-        const button = el.querySelector(".play-btn");
-        const playerSlot = el.querySelector(".player-slot");
+  const info = document.createElement("div");
+  info.className = "track-info";
 
-        // Whole track click
-        el.addEventListener("click", (e) => {
-          // Prevent clicks on button or link from triggering row click
-          if (e.target.closest(".play-btn") || e.target.closest("a")) return;
+  const title = document.createElement("div");
+  title.className = "track-title";
+  title.textContent = track.title || "Untitled";
 
-          openPlayer(track, playerSlot);
-        });
+  const date = document.createElement("div");
+  date.className = "track-date";
+  date.textContent = dateText;
 
-        // Button still works
-        button.addEventListener("click", (e) => {
-          e.stopPropagation();
-          openPlayer(track, playerSlot);
-        });
+  const playerSlot = document.createElement("div");
+  playerSlot.className = "player-slot";
 
+  const button = document.createElement("button");
+  button.className = "play-btn";
+  button.type = "button";
+  button.textContent = "▶";
 
-        container.appendChild(el);
-      });
+  info.appendChild(title);
+  info.appendChild(date);
+
+  el.appendChild(img);
+  el.appendChild(info);
+  el.appendChild(button);
+  el.appendChild(playerSlot);
+
+  el.addEventListener("click", (e) => {
+    if (e.target.closest(".play-btn")) return;
+    openPlayer(track, playerSlot);
+  });
+
+  button.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openPlayer(track, playerSlot);
+  });
+
+  container.appendChild(el);
+});
 
       offset += data.tracks.length;
       hasMore = Boolean(data.hasMore);
