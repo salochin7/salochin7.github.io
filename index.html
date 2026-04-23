@@ -335,6 +335,9 @@
         Math.max(90, Math.floor((window.innerWidth * window.innerHeight) / 9000))
       );
 
+      const STAR_PAD = window.innerHeight * 1.0;
+      const totalHeight = window.innerHeight + STAR_PAD * 2;
+
       for (let i = 0; i < count; i++) {
         const star = document.createElement("div");
         star.className = "star";
@@ -344,11 +347,11 @@
         star.appendChild(core);
 
         const x = Math.random() * window.innerWidth;
-        const y = Math.random() * Math.max(window.innerHeight, document.documentElement.scrollHeight);
+        const y = -STAR_PAD + Math.random() * totalHeight;
         const size = Math.random() * 2 + 1;
 
-        star.style.left = `${x}px`;
-        star.style.top = `${y}px`;
+        star.style.left = "0px";
+        star.style.top = "0px";
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
 
@@ -372,6 +375,8 @@
       function animateStars() {
       const scrollY = window.scrollY;
       const time = performance.now() * 0.001;
+      const STAR_PAD = window.innerHeight * 1.0;
+      const totalHeight = window.innerHeight + STAR_PAD * 2;
 
       const rawDelta = scrollY - lastScrollY;
       lastScrollY = scrollY;
@@ -389,7 +394,16 @@
       for (const star of stars) {
         const moveX = Math.sin(time * star.speed + star.baseY * 0.01) * star.driftX;
         const moveY = Math.cos(time * star.speed + star.baseX * 0.01) * star.driftY;
-        star.el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        const parallaxY = scrollY * star.scrollFactor;
+
+        let finalY = star.baseY + moveY + parallaxY;
+
+        while (finalY < -STAR_PAD) finalY += totalHeight;
+        while (finalY > window.innerHeight + STAR_PAD) finalY -= totalHeight;
+
+        const finalX = star.baseX + moveX;
+
+        star.el.style.transform = `translate(${finalX}px, ${finalY}px)`;
 
         // twinkle
         const twinkle = 0.75 + ((Math.sin(time * star.twinkleSpeed + star.twinkleOffset) + 1) * 0.5) * 0.5;
@@ -398,13 +412,9 @@
         const stretchY = 1 + currentStretch * 1.6;
         const squeezeX = Math.max(0.2, 1 - currentStretch * 0.18);
 
-        // slight directional skew helps sell the streak effect
-        const skew = currentStretch * 4 * scrollDirection;
-
         star.core.style.opacity = Math.min(1, 0.35 + twinkle + currentStretch * 0.08);
         star.core.style.transformOrigin = scrollDirection > 0 ? "center top" : "center bottom";
         star.core.style.transform = `
-  translate(-50%, -50%)
   scale(${squeezeX}, ${stretchY})
 `;
       }
