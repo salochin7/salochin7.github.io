@@ -320,6 +320,8 @@
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {
+      let lastScrollY = window.scrollY;
+      let scrollVelocity = 0;
       const starfield = document.getElementById("starfield");
       const stars = [];
       const STAR_COUNT = Math.min(180, Math.max(90, Math.floor((window.innerWidth * window.innerHeight) / 9000)));
@@ -360,6 +362,9 @@
       }
 
       function animateStars() {
+        const currentScrollY = window.scrollY;
+        scrollVelocity = currentScrollY - lastScrollY;
+        lastScrollY = currentScrollY;
         const scrollY = window.scrollY;
         const time = performance.now() * 0.001;
 
@@ -368,8 +373,15 @@
           const moveY = Math.cos(time * star.speed + star.baseX * 0.01) * star.driftY;
           const parallaxY = scrollY * star.scrollFactor;
 
-          star.el.style.transform = `translate(${moveX}px, ${moveY + parallaxY}px)`;
-        }
+          const stretch = Math.min(3, Math.abs(scrollVelocity) * 0.15); // cap stretch
+
+          const scaleY = 1 + stretch;
+          const scaleX = 1 - stretch * 0.3; // slight squeeze so it looks like streaks
+
+          star.el.style.transform = `
+            translate(${moveX}px, ${moveY + parallaxY}px)
+            scale(${scaleX}, ${scaleY})
+          `;        }
 
         requestAnimationFrame(animateStars);
       }
