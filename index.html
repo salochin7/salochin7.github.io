@@ -277,19 +277,33 @@
     <p>Music and games.</p>
 
     <div class="links">
-      <a href="https://soundcloud.com/anicable" target="_blank" rel="noopener noreferrer">
+      <a href="https://soundcloud.com/anicable" data-ga="music_link" target="_blank" rel="noopener noreferrer">
         🎵 SoundCloud
       </a>
-      <a href="https://phaser.anicable.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://phaser.anicable.com" data-ga="phaser_link" target="_blank" rel="noopener noreferrer">
         🚀 Play Phaser
       </a>
-      <a href="https://twitch.tv/Anicable" target="_blank" rel="noopener noreferrer"> 
+      <a href="https://twitch.tv/Anicable" data-ga="twitch_link" target="_blank" rel="noopener noreferrer"> 
         📺 Twitch
       </a>
-      <a href="https://discord.gg/Guss6Kr2Cn" target="_blank" rel="noopener noreferrer">
+      <a href="https://discord.gg/Guss6Kr2Cn" data-ga="discord_link" target="_blank" rel="noopener noreferrer">
         👾 Phaser Discord
       </a>
     </div>
+
+<script>
+  document.querySelectorAll("[data-ga]").forEach(link => {
+    link.addEventListener("click", () => {
+      if (typeof gtag === "function") {
+        gtag("event", link.dataset.ga, {
+          link_text: link.innerText.trim(),
+          link_url: link.href,
+          page_location: window.location.href
+        });
+      }
+    });
+  });
+</script>
 
     <div class="release">
       <h2>Latest Release</h2>
