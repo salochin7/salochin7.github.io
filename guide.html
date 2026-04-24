@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phaser Guide | Anicable Studios</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(ellipse at bottom, #0b0f1a 0%, #000 100%);
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .section {
+      margin: 40px 0;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-align: left;
+    }
+
+    .card img {
+      width: 50px;
+      height: 50px;
+      image-rendering: pixelated;
+    }
+
+    .controls {
+      text-align: left;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .controls p {
+      margin: 5px 0;
+    }
+
+    .tip {
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(0, 150, 255, 0.15);
+      border-left: 4px solid #00aaff;
+      border-radius: 6px;
+      text-align: left;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 20px;
+      background: #ff6a00;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: 0.2s;
+    }
+
+    a.button:hover {
+      background: #ff8c1a;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>PHASER GAME GUIDE</h1>
+    <p>Survive as long as possible while upgrading your ship and fighting increasingly difficult enemies.</p>
+
+    <a class="button" href="https://phaser.anicable.com" target="_blank">
+      ▶ Play Phaser
+    </a>
+
+    <!-- CONTROLS -->
+    <div class="section">
+      <h2>Controls</h2>
+      <div class="controls">
+        <p><strong>Move:</strong> WASD</p>
+        <p><strong>Fire:</strong> Left Click</p>
+        <p><strong>Exit Station:</strong> E</p>
+        <p><strong>Pause / Settings:</strong> ESC</p>
+      </div>
+    </div>
+
+    <!-- ENEMIES -->
+    <div class="section">
+      <h2>Enemies</h2>
+
+      <div class="card">
+        <img src="https://github.com/user-attachments/assets/9891b6c2-ace0-409c-b4bc-6f969d715aac" />
+        <div>
+          <strong>Arrow</strong>
+          <p>Basic enemy that aggressively follows and rams your ship.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://github.com/user-attachments/assets/c066228f-5475-4a61-8731-768ab0ea2a67" />
+        <div>
+          <strong>Zoid</strong>
+          <p>Keeps distance and attacks from afar with ranged shots.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- POWER UPS -->
+    <div class="section">
+      <h2>Power Ups</h2>
+
+      <div class="card">
+        <img src="https://github.com/user-attachments/assets/4ff2e662-de91-4497-8d7c-5e43d30a93ef" />
+        <div>
+          <strong>Shield</strong>
+          <p>Blocks all incoming damage — except from black holes.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- OBJECTS -->
+    <div class="section">
+      <h2>Objects & Obstacles</h2>
+
+      <div class="card">
+        <img src="https://github.com/user-attachments/assets/96fbf09a-282c-4433-8a70-fc8eb8070f6e" />
+        <div>
+          <strong>Station</strong>
+          <p>Upgrade your ship and recover in a safe zone.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://github.com/user-attachments/assets/ae486dad-a87d-4ad3-b6fc-ad0ddcd293a3" />
+        <div>
+          <strong>Rings</strong>
+          <p>Fly through them to gain experience and a speed boost.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://github.com/user-attachments/assets/21580670-d3a1-4211-8ab4-1df040b28e58" />
+        <div>
+          <strong>Black Holes</strong>
+          <p>Extremely dangerous — avoid them or use them to slingshot across space.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TIPS -->
+    <div class="section">
+      <h2>Tips</h2>
+
+      <div class="tip">
+        ✔ Keep moving — staying still makes you an easy target.<br><br>
+        ✔ Use rings early to level up faster.<br><br>
+        ✔ Visit stations often to upgrade before difficulty spikes.<br><br>
+        ✔ Use black holes strategically for speed boosts (high risk, high reward).<br><br>
+        ✔ Prioritize avoiding damage over chasing enemies.
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
