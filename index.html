@@ -282,32 +282,132 @@ footer span {
 
 @media (max-width: 720px) {
   body {
-    padding: 18px;
+    padding: 12px;
+    align-items: flex-start;
   }
 
   .card {
-    padding: 24px;
-    margin: 24px auto;
+    width: 100%;
+    margin: 18px auto;
+    padding: 18px 12px;
+    box-shadow: none;
+    backdrop-filter: blur(6px);
+  }
+
+  h1 {
+    font-size: clamp(2rem, 12vw, 3rem);
+    letter-spacing: 2px;
+    line-height: 1.05;
+  }
+
+  p {
+    font-size: 0.95rem;
+    margin-bottom: 18px;
   }
 
   .links {
     grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .links a {
+    padding: 15px 14px;
+    border-radius: 14px;
+    font-size: 1rem;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .release {
+    padding: 14px;
+    margin-top: 14px;
+    border-radius: 14px;
+  }
+
+  .release h2 {
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+  }
+
+  iframe,
+  .player-slot iframe {
+    height: 150px;
   }
 
   .track {
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 54px 1fr 44px;
+    gap: 10px;
+    padding: 10px;
+    align-items: center;
   }
 
   .track img {
-    width: 56px;
-    height: 56px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .track-info {
+    min-width: 0;
+  }
+
+  .track-title {
+    font-size: 0.95rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .track-date {
+    font-size: 0.75rem;
+  }
+
+  .play-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .player-slot {
+    grid-column: 1 / -1;
   }
 
   footer {
     position: static;
-    margin-top: 24px;
+    width: auto;
+    margin: 18px auto 0;
+    padding-bottom: 10px;
+    font-size: 0.75rem;
   }
-    }
+
+  footer span {
+    display: inline-block;
+    max-width: calc(100vw - 24px);
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .card {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .track {
+    grid-template-columns: 48px 1fr 40px;
+  }
+
+  .track img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .play-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
   </style>
 </head>
 <!-- Google tag (gtag.js) -->
