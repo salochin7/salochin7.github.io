@@ -6,125 +6,337 @@
   <title>Phaser Guide | Anicable Studios</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: radial-gradient(ellipse at bottom, #0b0f1a 0%, #000 100%);
+      background: radial-gradient(ellipse at bottom, #101827 0%, #02040a 65%, #000 100%);
       color: white;
       text-align: center;
+      overflow-x: hidden;
     }
 
-    h1 {
-      margin-top: 40px;
-      font-size: 2.5rem;
-      letter-spacing: 2px;
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(1px 1px at 90px 80px, white, transparent),
+        radial-gradient(2px 2px at 160px 120px, #8fdcff, transparent),
+        radial-gradient(1px 1px at 260px 200px, white, transparent),
+        radial-gradient(2px 2px at 330px 60px, #ffb36b, transparent);
+      background-size: 420px 420px;
+      animation: starDrift 60s linear infinite;
+      opacity: 0.65;
     }
 
-    h2 {
-      margin-top: 40px;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      display: block;
-      padding-bottom: 5px;
+    body::after {
+      z-index: -1;
+      background-size: 700px 700px;
+      animation: starDrift 100s linear infinite reverse, twinkle 3s ease-in-out infinite;
+      opacity: 0.35;
+    }
+
+    @keyframes starDrift {
+      from { transform: translateY(0); }
+      to { transform: translateY(-420px); }
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 0.75; }
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
-      padding: 20px;
+      padding: 24px;
     }
 
-    .section {
-      margin: 40px 0;
+    .hero {
+      min-height: 55vh;
+      display: grid;
+      place-items: center;
+      padding: 60px 0 30px;
     }
 
-    .card {
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 20px;
-      margin: 15px 0;
+    .hero-inner {
+      animation: fadeUp 0.8s ease both;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 8vw, 5.5rem);
+      letter-spacing: 4px;
+      text-shadow:
+        0 0 10px rgba(255, 106, 0, 0.9),
+        0 0 35px rgba(255, 106, 0, 0.35);
+    }
+
+    .subtitle {
+      max-width: 650px;
+      margin: 18px auto 0;
+      color: rgba(255,255,255,0.78);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .button-row {
       display: flex;
-      align-items: center;
-      gap: 15px;
-      text-align: left;
-    }
-
-    .card img {
-      width: 50px;
-      height: 50px;
-      image-rendering: pixelated;
-    }
-
-    .controls {
-      text-align: left;
-      display: inline-block;
-      margin-top: 10px;
-    }
-
-    .controls p {
-      margin: 5px 0;
-    }
-
-    .tip {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
       margin-top: 30px;
-      padding: 15px;
-      background: rgba(0, 150, 255, 0.15);
-      border-left: 4px solid #00aaff;
-      border-radius: 6px;
-      text-align: left;
     }
 
     a.button {
       display: inline-block;
-      margin-top: 30px;
-      padding: 12px 20px;
-      background: #ff6a00;
+      padding: 13px 22px;
+      background: linear-gradient(135deg, #ff6a00, #ff9d2e);
       color: white;
       text-decoration: none;
-      border-radius: 6px;
-      transition: 0.2s;
+      border-radius: 999px;
+      font-weight: bold;
+      box-shadow: 0 0 25px rgba(255, 106, 0, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    a.button.secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: none;
     }
 
     a.button:hover {
-      background: #ff8c1a;
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 0 35px rgba(255, 106, 0, 0.6);
+    }
+
+    .section {
+      margin: 58px 0;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    h2 {
+      margin: 0 0 22px;
+      padding-bottom: 10px;
+      font-size: 1.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.16);
+      text-shadow: 0 0 15px rgba(0, 170, 255, 0.35);
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .control-box,
+    .card,
+    .tip {
+      background: rgba(255,255,255,0.065);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.28);
+    }
+
+    .control-box {
+      padding: 22px;
+      text-align: left;
+    }
+
+    .control-box h3 {
+      margin: 0 0 14px;
+      color: #ffb36b;
+    }
+
+    .controls p {
+      margin: 9px 0;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .controls strong {
+      color: white;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+      margin: 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      text-align: left;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: translateX(-120%);
+      transition: transform 0.6s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 157, 46, 0.55);
+      background: rgba(255,255,255,0.095);
+    }
+
+    .card:hover::before {
+      transform: translateX(120%);
+    }
+
+    .card img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 0 12px rgba(255,255,255,0.35));
+      flex: 0 0 auto;
+    }
+
+    .card strong {
+      color: #ffffff;
+      font-size: 1.12rem;
+    }
+
+    .card p {
+      margin: 6px 0 0;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.5;
+    }
+
+    .tip {
+      margin-top: 20px;
+      padding: 22px;
+      border-left: 4px solid #00aaff;
+      text-align: left;
+      line-height: 1.7;
+      background: rgba(0, 150, 255, 0.13);
+    }
+
+    .footer {
+      padding: 40px 0;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        padding: 18px;
+      }
+
+      .hero {
+        min-height: 45vh;
+      }
+
+      .control-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        align-items: flex-start;
+      }
+
+      .card img {
+        width: 46px;
+        height: 46px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      body::before,
+      body::after {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
 
 <body>
-
   <div class="container">
-    <h1>PHASER GAME GUIDE</h1>
-    <p>Survive as long as possible while upgrading your ship and fighting increasingly difficult enemies.</p>
 
-    <a class="button" href="https://phaser.anicable.com" target="_blank">
-      ▶ Play Phaser
-    </a>
+    <header class="hero">
+      <div class="hero-inner">
+        <h1>PHASER</h1>
+        <p class="subtitle">
+          Game guide for surviving longer, upgrading smarter, and staying alive against increasingly dangerous waves of enemies.
+        </p>
 
-    <!-- CONTROLS -->
-    <div class="section">
-      <h2>Desktop Controls</h2>
-      <div class="controls">
-        <p><strong>Move:</strong> WASD</p>
-        <p><strong>Fire:</strong> Left Click</p>
-        <p><strong>Exit Station:</strong> E</p>
-        <p><strong>Pause / Settings:</strong> ESC</p>
+        <div class="button-row">
+          <a class="button" href="https://phaser.anicable.com" target="_blank" rel="noopener noreferrer">
+            ▶ Play Phaser
+          </a>
+
+          <a class="button secondary" href="/">
+            ← Back to Anicable Studios
+          </a>
+        </div>
       </div>
+    </header>
 
-      <h2>Mobile Controls</h2>
-      <div class="controls">
-        <p><strong>Move:</strong>Tap and drag on left side of screen.</p>
-        <p><strong>Fire/Aim:</strong> Tap and drag on right side of screen</p>
-        <p><strong>Exit Station:</strong> Exit button (bottom right)</p>
-        <p><strong>Pause / Settings:</strong> Pause button (top right)</p>
+    <section class="section">
+      <h2>Controls</h2>
+
+      <div class="control-grid">
+        <div class="control-box">
+          <h3>Desktop</h3>
+          <div class="controls">
+            <p><strong>Move:</strong> WASD</p>
+            <p><strong>Fire:</strong> Left Click</p>
+            <p><strong>Exit Station:</strong> E</p>
+            <p><strong>Pause / Settings:</strong> ESC</p>
+          </div>
+        </div>
+
+        <div class="control-box">
+          <h3>Mobile</h3>
+          <div class="controls">
+            <p><strong>Move:</strong> Tap and drag on the left side of the screen.</p>
+            <p><strong>Fire / Aim:</strong> Tap and drag on the right side of the screen.</p>
+            <p><strong>Exit Station:</strong> Exit button in the bottom right.</p>
+            <p><strong>Pause / Settings:</strong> Pause button in the top right.</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- ENEMIES -->
-    <div class="section">
+    <section class="section">
       <h2>Enemies</h2>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/9891b6c2-ace0-409c-b4bc-6f969d715aac" />
+        <img src="https://github.com/user-attachments/assets/9891b6c2-ace0-409c-b4bc-6f969d715aac" alt="Arrow enemy" />
         <div>
           <strong>Arrow</strong>
           <p>Basic enemy that aggressively follows and rams your ship.</p>
@@ -132,7 +344,7 @@
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/c066228f-5475-4a61-8731-768ab0ea2a67" />
+        <img src="https://github.com/user-attachments/assets/c066228f-5475-4a61-8731-768ab0ea2a67" alt="Zoid enemy" />
         <div>
           <strong>Zoid</strong>
           <p>Keeps distance and attacks from afar with ranged shots.</p>
@@ -140,73 +352,70 @@
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/e9e58c33-f2f9-4c30-a9e9-3f818b4e470d" />
+        <img src="https://github.com/user-attachments/assets/e9e58c33-f2f9-4c30-a9e9-3f818b4e470d" alt="Kite enemy" />
         <div>
           <strong>Kite</strong>
-          <p> Sniper enemy, one powerful shot that charges up before firing. </p>
+          <p>Sniper enemy with one powerful shot that charges up before firing.</p>
         </div>
       </div>
+    </section>
 
-    </div>
-
-    <!-- POWER UPS -->
-    <div class="section">
+    <section class="section">
       <h2>Power Ups</h2>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/4ff2e662-de91-4497-8d7c-5e43d30a93ef" />
+        <img src="https://github.com/user-attachments/assets/4ff2e662-de91-4497-8d7c-5e43d30a93ef" alt="Shield power up" />
         <div>
           <strong>Shield</strong>
           <p>Blocks all incoming damage — except from black holes.</p>
         </div>
       </div>
+    </section>
 
-    </div>
-
-    <!-- OBJECTS -->
-    <div class="section">
+    <section class="section">
       <h2>Objects & Obstacles</h2>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/96fbf09a-282c-4433-8a70-fc8eb8070f6e" />
+        <img src="https://github.com/user-attachments/assets/96fbf09a-282c-4433-8a70-fc8eb8070f6e" alt="Station" />
         <div>
           <strong>Station</strong>
-          <p>Upgrade your ship and recover in a safe zone.</p>
+          <p>Upgrade your ship and recover inside a temporary safe zone.</p>
         </div>
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/ae486dad-a87d-4ad3-b6fc-ad0ddcd293a3" />
+        <img src="https://github.com/user-attachments/assets/ae486dad-a87d-4ad3-b6fc-ad0ddcd293a3" alt="Ring" />
         <div>
           <strong>Rings</strong>
-          <p>Fly through them to gain experience and a speed boost.</p>
+          <p>Fly through them to gain experience and receive a speed boost.</p>
         </div>
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/21580670-d3a1-4211-8ab4-1df040b28e58" />
+        <img src="https://github.com/user-attachments/assets/21580670-d3a1-4211-8ab4-1df040b28e58" alt="Black hole" />
         <div>
           <strong>Black Holes</strong>
           <p>Extremely dangerous — avoid them or use them to slingshot across space.</p>
         </div>
       </div>
+    </section>
 
-    </div>
-
-    <!-- TIPS -->
-    <div class="section">
+    <section class="section">
       <h2>Tips</h2>
 
       <div class="tip">
         ✔ Keep moving — staying still makes you an easy target.<br><br>
         ✔ Use rings early to level up faster.<br><br>
         ✔ Visit stations often to upgrade before difficulty spikes.<br><br>
-        ✔ Use black holes strategically for speed boosts (high risk, high reward).<br><br>
+        ✔ Use black holes strategically for speed boosts, but do not get too close.<br><br>
         ✔ Prioritize avoiding damage over chasing enemies.
       </div>
-    </div>
+    </section>
+
+    <footer class="footer">
+      Anicable Studios · Phaser Game Guide
+    </footer>
 
   </div>
-
 </body>
 </html>
