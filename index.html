@@ -94,6 +94,17 @@ p {
   gap: 14px;
   margin-bottom: 30px;
 }
+button {
+ display: block;
+  text-decoration: none;
+  color: white;
+  background: rgba(255,255,255,0.065);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 15px 18px;
+  border-radius: 999px;
+  font-weight: bold;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
 
 .links a {
   display: block;
@@ -106,7 +117,12 @@ p {
   font-weight: bold;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
-
+button:hover {
+ transform: translateY(-3px) scale(1.03);
+  background: linear-gradient(135deg, #ff6a00, #ff9d2e);
+  border-color: rgba(255, 157, 46, 0.65);
+  box-shadow: 0 0 28px rgba(255, 106, 0, 0.45);
+}
 .links a:hover {
   transform: translateY(-3px) scale(1.03);
   background: linear-gradient(135deg, #ff6a00, #ff9d2e);
