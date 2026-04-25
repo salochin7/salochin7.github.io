@@ -425,7 +425,22 @@ footer span {
   <div class="card">
     <h1>ANICABLE STUDIOS</h1>
     <p>Music and games.</p>
+    <p>Players online: <span id="activePlayers">...</span></p>
 
+<script>
+async function loadActivePlayers() {
+  try {
+    const res = await fetch("https://project-mwaqf.vercel.app/api/active-players");
+    const data = await res.json();
+    document.getElementById("activePlayers").textContent = data.count;
+  } catch {
+    document.getElementById("activePlayers").textContent = "?";
+  }
+}
+
+loadActivePlayers();
+setInterval(loadActivePlayers, 30000);
+</script>
     <div class="links">
       <a href="https://soundcloud.com/anicable" data-ga="music_link" target="_blank" rel="noopener noreferrer">
         🎵 SoundCloud
