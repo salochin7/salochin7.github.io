@@ -428,6 +428,8 @@ footer span {
     <p>Players online: <span id="activePlayers">...</span></p>
 
 <script>
+let activePlayerTimer;
+
 async function loadActivePlayers() {
   try {
     const res = await fetch("https://project-mwaqf.vercel.app/api/active-players");
@@ -438,8 +440,24 @@ async function loadActivePlayers() {
   }
 }
 
-loadActivePlayers();
-setInterval(loadActivePlayers, 30000);
+function startActivePlayerPolling() {
+  loadActivePlayers();
+  activePlayerTimer = setInterval(loadActivePlayers, 60000);
+}
+
+function stopActivePlayerPolling() {
+  clearInterval(activePlayerTimer);
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    stopActivePlayerPolling();
+  } else {
+    startActivePlayerPolling();
+  }
+});
+
+startActivePlayerPolling();
 </script>
     <div class="links">
       <a href="https://soundcloud.com/anicable" data-ga="music_link" target="_blank" rel="noopener noreferrer">
