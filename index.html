@@ -426,48 +426,68 @@ footer span {
     <h1>ANICABLE STUDIOS</h1>
     <p>Music and games.</p>
     <p>Players online: <span id="activePlayers">...</span></p>
+<button id="refreshPlayersBtn">Refresh</button>
+<p id="refreshCooldownText"></p>
 
 <script>
-let activePlayerTimer;
+const refreshBtn = document.getElementById("refreshPlayersBtn");
+const activePlayers = document.getElementById("activePlayers");
+const cooldownText = document.getElementById("refreshCooldownText");
 
-let lastFetchTime = 0;
-let cachedCount = null;
+const endpoint = "https://project-mwaqf.vercel.app/api/active-players";
+const cooldownMs = 60000;
 
-async function loadActivePlayers() {
-  const now = Date.now();
+function getRemainingCooldown() {
+  const lastRefresh = Number(localStorage.getItem("lastPlayerCountRefresh") || 0);
+  return Math.max(0, cooldownMs - (Date.now() - lastRefresh));
+}
 
-  if (cachedCount !== null && now - lastFetchTime < 30000) {
-    document.getElementById("activePlayers").textContent = cachedCount;
+function updateCooldownUI() {
+  const remaining = getRemainingCooldown();
+
+  if (remaining > 0) {
+    refreshBtn.disabled = true;
+    cooldownText.textContent = `Refresh available in ${Math.ceil(remaining / 1000)}s`;
+  } else {
+    refreshBtn.disabled = false;
+    cooldownText.textContent = "";
+  }
+}
+
+async function refreshPlayerCount() {
+  const remaining = getRemainingCooldown();
+
+  if (remaining > 0) {
+    updateCooldownUI();
     return;
   }
 
-  const res = await fetch("https://project-mwaqf.vercel.app/api/active-players");
-  const data = await res.json();
+  refreshBtn.disabled = true;
+  cooldownText.textContent = "Refreshing...";
 
-  cachedCount = data.count;
-  lastFetchTime = now;
+  try {
+    const res = await fetch(endpoint);
+    const data = await res.json();
 
-  document.getElementById("activePlayers").textContent = data.count;
-}
+    if (res.status === 429) {
+      cooldownText.textContent = data.error || "Please wait before refreshing again.";
+      return;
+    }
 
-function startActivePlayerPolling() {
-  loadActivePlayers();
-  activePlayerTimer = setInterval(loadActivePlayers, 60000);
-}
-
-function stopActivePlayerPolling() {
-  clearInterval(activePlayerTimer);
-}
-
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    stopActivePlayerPolling();
-  } else {
-    startActivePlayerPolling();
+    activePlayers.textContent = data.count;
+    localStorage.setItem("lastPlayerCountRefresh", Date.now().toString());
+  } catch {
+    activePlayers.textContent = "?";
+    cooldownText.textContent = "Could not refresh player count.";
   }
-});
 
-startActivePlayerPolling();
+  updateCooldownUI();
+}
+
+refreshBtn.addEventListener("click", refreshPlayerCount);
+
+updateCooldownUI();
+setInterval(updateCooldownUI, 1000);
 </script>
     <div class="links">
       <a href="https://soundcloud.com/anicable" data-ga="music_link" target="_blank" rel="noopener noreferrer">
