@@ -430,14 +430,24 @@ footer span {
 <script>
 let activePlayerTimer;
 
+let lastFetchTime = 0;
+let cachedCount = null;
+
 async function loadActivePlayers() {
-  try {
-    const res = await fetch("https://project-mwaqf.vercel.app/api/active-players");
-    const data = await res.json();
-    document.getElementById("activePlayers").textContent = data.count;
-  } catch {
-    document.getElementById("activePlayers").textContent = "?";
+  const now = Date.now();
+
+  if (cachedCount !== null && now - lastFetchTime < 30000) {
+    document.getElementById("activePlayers").textContent = cachedCount;
+    return;
   }
+
+  const res = await fetch("https://project-mwaqf.vercel.app/api/active-players");
+  const data = await res.json();
+
+  cachedCount = data.count;
+  lastFetchTime = now;
+
+  document.getElementById("activePlayers").textContent = data.count;
 }
 
 function startActivePlayerPolling() {
