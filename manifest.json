@@ -1,7 +1,7 @@
 {
   "name": "Phaser",
   "short_name": "Phaser",
-  "start_url": "/index.html",
+  "start_url": "/pregame.html",
   "display": "fullscreen",
   "background_color": "#000000",
   "theme_color": "#000000",
