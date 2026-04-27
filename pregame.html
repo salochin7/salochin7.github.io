@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="shortcut icon" href="TemplateData/Phaser.ico">
+  <link rel="manifest" href="manifest.json">
+  <title>Anicable Studios | Phaser</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      padding-top: calc(24px + env(safe-area-inset-top));
+      padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 120, 0, 0.22), transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(80, 120, 255, 0.18), transparent 35%),
+        #000;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: rgba(15, 15, 20, 0.92);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 22px;
+      padding: 28px;
+      text-align: center;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      margin: 0 0 22px;
+      color: #ccc;
+      line-height: 1.4;
+    }
+
+    .instructions {
+      margin: 20px 0;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .instructions strong {
+      color: #ff9a2f;
+    }
+
+    .play-button {
+      display: block;
+      width: 100%;
+      margin-top: 18px;
+      padding: 15px 18px;
+      border-radius: 14px;
+      border: none;
+      background: #ff7a00;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .small {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <h1>Phaser</h1>
+    <p class="subtitle">A browser space shooter by Anicable Studios.</p>
+
+    <div id="ios-instructions" class="instructions">
+      <p><strong>Best on iPhone/iPad:</strong></p>
+      <p>Tap the <strong>Share</strong> button, then choose <strong>Add to Home Screen</strong>.</p>
+      <p>Then launch Phaser from your Home Screen for the closest thing to fullscreen.</p>
+    </div>
+
+    <a class="play-button" href="index.html">Play Phaser</a>
+
+    <p class="small">
+      If you are already using the Home Screen version, just tap Play.
+    </p>
+  </main>
+
+  <script>
+function isIOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent)
+    || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function isStandalone() {
+  return window.navigator.standalone === true
+    || window.matchMedia("(display-mode: standalone)").matches;
+}
+
+
+// Hide instructions if not needed
+const instructions = document.getElementById("ios-instructions");
+
+if (!isIOS() || isStandalone()) {
+  if (instructions) instructions.style.display = "none";
+}
+</script>
+</body>
+</html>
