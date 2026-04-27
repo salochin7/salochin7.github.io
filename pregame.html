@@ -104,7 +104,7 @@
 <body>
   <main class="card">
     <h1>Phaser</h1>
-    <p class="subtitle">A browser space shooter by Anicable Studios.</p>
+    <p class="subtitle">A space shooter by Anicable Studios.</p>
 
     <div id="ios-instructions" class="instructions">
       <p><strong>Best on iPhone/iPad:</strong></p>
@@ -119,25 +119,27 @@
     </p>
   </main>
 
-  <script>
+<script>
+function isMobile() {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+// 🔥 Auto redirect if NOT mobile
+if (!isMobile()) {
+  window.location.replace("index.html");
+}
+
+// Hide iOS instructions if not iOS
 function isIOS() {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent)
     || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 }
 
-function isStandalone() {
-  return window.navigator.standalone === true
-    || window.matchMedia("(display-mode: standalone)").matches;
-}
-if (isStandalone()) {
-  window.location.replace("index.html");
-}
-
-// Hide instructions if not needed
 const instructions = document.getElementById("ios-instructions");
 
-if (!isIOS() || isStandalone()) {
-  if (instructions) instructions.style.display = "none";
+if (!isIOS() && instructions) {
+  instructions.style.display = "none";
 }
 </script>
 </body>
