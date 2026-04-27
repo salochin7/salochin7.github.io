@@ -125,20 +125,29 @@ function isMobile() {
     || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 }
 
-if (isStandalone()) {
-  window.location.replace("https://phaser.anicable.com/");
-}
-// 🔥 Auto redirect if NOT mobile
-if (!isMobile()) {
-  window.location.replace("https://phaser.anicable.com/");
-}
-
-// Hide iOS instructions if not iOS
 function isIOS() {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent)
     || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 }
 
+function isStandalone() {
+  return window.navigator.standalone === true ||
+    window.matchMedia("(display-mode: standalone)").matches;
+}
+
+const GAME_URL = "https://phaser.anicable.com/";
+
+// Auto redirect when launched from Home Screen
+if (isStandalone()) {
+  window.location.replace(GAME_URL);
+}
+
+// Auto redirect desktop users
+if (!isMobile()) {
+  window.location.replace(GAME_URL);
+}
+
+// Hide iOS instructions if not iOS
 const instructions = document.getElementById("ios-instructions");
 
 if (!isIOS() && instructions) {
