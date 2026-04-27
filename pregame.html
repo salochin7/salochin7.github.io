@@ -129,7 +129,9 @@ function isStandalone() {
   return window.navigator.standalone === true
     || window.matchMedia("(display-mode: standalone)").matches;
 }
-
+if (isStandalone()) {
+  window.location.replace("index.html");
+}
 
 // Hide instructions if not needed
 const instructions = document.getElementById("ios-instructions");
