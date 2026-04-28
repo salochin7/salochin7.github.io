@@ -285,6 +285,134 @@ footer span {
   backdrop-filter: blur(4px);
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
+.playtest-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.playtest-modal.is-visible {
+  display: flex;
+}
+
+.playtest-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(8px);
+}
+
+.playtest-modal__panel {
+  position: relative;
+  width: min(100%, 460px);
+  padding: 28px;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(18, 24, 38, 0.96), rgba(9, 12, 20, 0.96));
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+  text-align: left;
+  animation: fadeUp 0.35s ease both;
+}
+
+.playtest-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.playtest-modal h2 {
+  margin: 0 42px 12px 0;
+  font-size: 1.65rem;
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-shadow: 0 0 18px rgba(255, 106, 0, 0.4);
+}
+
+.playtest-modal p {
+  margin-bottom: 18px;
+}
+
+.playtest-form {
+  display: grid;
+  gap: 12px;
+}
+
+.playtest-form label {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.72);
+}
+
+.playtest-form input[type="email"] {
+  width: 100%;
+  margin-top: 7px;
+  padding: 13px 14px;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 12px;
+  color: white;
+  background: rgba(255,255,255,0.08);
+  font: inherit;
+}
+
+.playtest-form input[type="email"]:focus {
+  outline: 2px solid rgba(255, 157, 46, 0.6);
+  outline-offset: 2px;
+}
+
+.playtest-form__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.playtest-form__submit,
+.playtest-form__dismiss {
+  cursor: pointer;
+}
+
+.playtest-form__submit {
+  background: linear-gradient(135deg, #ff6a00, #ff9d2e);
+  border-color: rgba(255, 157, 46, 0.65);
+  box-shadow: 0 0 22px rgba(255, 106, 0, 0.32);
+}
+
+.playtest-form__dismiss {
+  background: rgba(255,255,255,0.065);
+}
+
+.playtest-form__status {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.72);
+}
+
+.playtest-form__status.is-error {
+  color: #ffb2a0;
+}
+
+.playtest-form__status.is-success {
+  color: #b6ffd1;
+}
+
+.playtest-form__trap {
+  position: absolute;
+  left: -9999px;
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -355,6 +483,19 @@ footer span {
     margin: 12px auto;
     display: block;
   }
+
+  .playtest-modal {
+    align-items: flex-end;
+    padding: 16px;
+  }
+
+  .playtest-modal__panel {
+    padding: 24px 18px;
+  }
+
+  .playtest-form__actions {
+    display: grid;
+  }
 }
 
 @media (max-width: 380px) {
@@ -390,6 +531,31 @@ footer span {
 </script>
 <body>
   <div id="starfield" aria-hidden="true"></div>
+
+  <div class="playtest-modal" id="playtestModal" role="dialog" aria-modal="true" aria-labelledby="playtestTitle" hidden>
+    <div class="playtest-modal__backdrop" data-playtest-close></div>
+    <div class="playtest-modal__panel">
+      <button class="playtest-modal__close" type="button" aria-label="Close playtest signup" data-playtest-close>&times;</button>
+      <h2 id="playtestTitle">Join the Phaser playtest</h2>
+      <p>Want a key for the August 14, 2026 playtest? Drop your email and I'll send access details when keys are ready.</p>
+      <form class="playtest-form" id="playtestForm">
+        <label>
+          Email address
+          <input id="playtestEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        </label>
+        <label class="playtest-form__trap" aria-hidden="true">
+          Leave this field empty
+          <input name="website" tabindex="-1" autocomplete="off">
+        </label>
+        <input name="playtest" type="hidden" value="Phaser August 14 2026">
+        <div class="playtest-form__actions">
+          <button class="playtest-form__submit" type="submit">Request key</button>
+          <button class="playtest-form__dismiss" type="button" data-playtest-close>Maybe later</button>
+        </div>
+        <p class="playtest-form__status" id="playtestStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
 
   <div class="card">
     <h1>ANICABLE STUDIOS</h1>
@@ -517,6 +683,96 @@ setInterval(updateCooldownUI, 1000);
   </footer>
 
   <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("playtestModal");
+      const form = document.getElementById("playtestForm");
+      const email = document.getElementById("playtestEmail");
+      const status = document.getElementById("playtestStatus");
+      const closeButtons = document.querySelectorAll("[data-playtest-close]");
+
+      if (!modal || !form || !email || !status) return;
+
+      const PLAYTEST_STORAGE_KEY = "phaserPlaytestSignupPrompt";
+      const PLAYTEST_SIGNUP_ENDPOINT = "https://project-mwaqf.vercel.app/api/playtest-signup";
+
+      function setStatus(message, type = "") {
+        status.textContent = message;
+        status.className = `playtest-form__status${type ? ` is-${type}` : ""}`;
+      }
+
+      function closeModal(savePreference = true) {
+        modal.classList.remove("is-visible");
+        modal.hidden = true;
+        document.body.classList.remove("modal-open");
+
+        if (savePreference) {
+          localStorage.setItem(PLAYTEST_STORAGE_KEY, "dismissed");
+        }
+      }
+
+      function openModal() {
+        modal.hidden = false;
+        modal.classList.add("is-visible");
+        document.body.classList.add("modal-open");
+        setTimeout(() => email.focus(), 50);
+      }
+
+      if (!localStorage.getItem(PLAYTEST_STORAGE_KEY)) {
+        setTimeout(openModal, 900);
+      }
+
+      closeButtons.forEach(button => {
+        button.addEventListener("click", () => closeModal(true));
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && modal.classList.contains("is-visible")) {
+          closeModal(true);
+        }
+      });
+
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+
+        if (formData.get("website")) {
+          closeModal(true);
+          return;
+        }
+
+        setStatus("Saving your spot...");
+
+        try {
+          const res = await fetch(PLAYTEST_SIGNUP_ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: formData.get("email"),
+              playtest: formData.get("playtest"),
+              source: "anicable.com",
+              page: window.location.href,
+              submittedAt: new Date().toISOString()
+            })
+          });
+
+          if (!res.ok) {
+            throw new Error(`Signup failed: ${res.status}`);
+          }
+
+          localStorage.setItem(PLAYTEST_STORAGE_KEY, "signed-up");
+          setStatus("You're on the list. I'll send the key details before the playtest.", "success");
+          form.reset();
+          setTimeout(() => closeModal(false), 1800);
+        } catch (err) {
+          console.error("Playtest signup failed:", err);
+          setStatus("Something went wrong. Please try again in a minute.", "error");
+        }
+      });
+    });
+
     window.addEventListener("DOMContentLoaded", () => {
       let lastScrollY = window.scrollY;
       let targetStretch = 0;
