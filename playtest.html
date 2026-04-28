@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <meta name="description" content="Sign up for the Phaser playtest from Anicable Studios on August 14, 2026.">
+  <title>Phaser Playtest Signup | Anicable Studios</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+      background: radial-gradient(ellipse at bottom, #101827 0%, #02040a 65%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      overflow-x: hidden;
+    }
+
+    #starfield {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.75;
+      box-shadow:
+        0 0 6px rgba(255,255,255,0.55),
+        0 0 14px rgba(255,255,255,0.2);
+      animation: twinkle 3s ease-in-out infinite;
+    }
+
+    .signup-page {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 980px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .intro,
+    .signup-panel {
+      backdrop-filter: blur(10px);
+    }
+
+    .intro {
+      padding: 10px 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: #ff9d2e;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      line-height: 0.96;
+      letter-spacing: 0;
+      text-shadow:
+        0 0 10px rgba(255, 106, 0, 0.9),
+        0 0 35px rgba(255, 106, 0, 0.35);
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.6;
+    }
+
+    .date {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 157, 46, 0.4);
+      border-radius: 999px;
+      background: rgba(255, 106, 0, 0.12);
+      color: white;
+      font-weight: bold;
+    }
+
+    .signup-panel {
+      width: 100%;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(18, 24, 38, 0.96), rgba(9, 12, 20, 0.96));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+    }
+
+    .signup-panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.6rem;
+      line-height: 1.2;
+    }
+
+    .playtest-form {
+      display: grid;
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    .playtest-form label {
+      font-size: 0.86rem;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .playtest-form input[type="email"] {
+      width: 100%;
+      margin-top: 7px;
+      padding: 13px 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 12px;
+      color: white;
+      background: rgba(255,255,255,0.08);
+      font: inherit;
+    }
+
+    .playtest-form input[type="email"]:focus {
+      outline: 2px solid rgba(255, 157, 46, 0.6);
+      outline-offset: 2px;
+    }
+
+    .playtest-form__trap {
+      position: absolute;
+      left: -9999px;
+    }
+
+    button,
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 14px 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      color: white;
+      background: rgba(255,255,255,0.065);
+      font: inherit;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover,
+    .home-link:hover {
+      transform: translateY(-3px) scale(1.03);
+      background: linear-gradient(135deg, #ff6a00, #ff9d2e);
+      border-color: rgba(255, 157, 46, 0.65);
+      box-shadow: 0 0 28px rgba(255, 106, 0, 0.45);
+    }
+
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #ff6a00, #ff9d2e);
+      border-color: rgba(255, 157, 46, 0.65);
+      box-shadow: 0 0 22px rgba(255, 106, 0, 0.32);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .form-note,
+    .playtest-form__status {
+      margin: 0;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.64);
+    }
+
+    .playtest-form__status {
+      min-height: 1.4em;
+    }
+
+    .playtest-form__status.is-error {
+      color: #ffb2a0;
+    }
+
+    .playtest-form__status.is-success {
+      color: #b6ffd1;
+    }
+
+    .home-link {
+      margin-top: 8px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    footer span {
+      background: rgba(0,0,0,0.45);
+      padding: 6px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+    }
+
+    @keyframes twinkle {
+      0%,
+      100% {
+        opacity: 0.35;
+        transform: scale(0.85);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.15);
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        align-items: flex-start;
+        padding: 32px 18px 92px;
+      }
+
+      .signup-page {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+
+      .signup-panel {
+        padding: 24px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="starfield" aria-hidden="true"></div>
+
+  <main class="signup-page">
+    <section class="intro" aria-labelledby="pageTitle">
+      <p class="eyebrow">Anicable Studios</p>
+      <h1 id="pageTitle">Phaser Playtest</h1>
+      <p>Sign up for the upcoming Phaser playtest and get notified when access keys are ready.</p>
+      <p class="date">Playtest date: August 14, 2026</p>
+    </section>
+
+    <section class="signup-panel" aria-labelledby="signupTitle">
+      <h2 id="signupTitle">Request a playtest key</h2>
+      <p>Enter your email and I'll use it to send Phaser playtest access details.</p>
+
+      <form class="playtest-form" id="playtestForm">
+        <label>
+          Email address
+          <input id="playtestEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        </label>
+        <label class="playtest-form__trap" aria-hidden="true">
+          Leave this field empty
+          <input name="website" tabindex="-1" autocomplete="off">
+        </label>
+        <input name="playtest" type="hidden" value="Phaser August 14 2026">
+        <button id="playtestSubmit" type="submit">Request key</button>
+        <p class="playtest-form__status" id="playtestStatus" role="status" aria-live="polite"></p>
+        <p class="form-note">No account needed. This uses the same signup list as the homepage popup.</p>
+      </form>
+
+      <a class="home-link" href="/">Back to Anicable Studios</a>
+    </section>
+  </main>
+
+  <footer>
+    <span>&copy; 2026 Anicable Studios LLC. All rights reserved.</span>
+  </footer>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const starfield = document.getElementById("starfield");
+      const form = document.getElementById("playtestForm");
+      const submit = document.getElementById("playtestSubmit");
+      const status = document.getElementById("playtestStatus");
+
+      const PLAYTEST_STORAGE_KEY = "phaserPlaytestSignupPrompt";
+      const PLAYTEST_SIGNUP_ENDPOINT = "https://project-mwaqf.vercel.app/api/playtest-signup";
+
+      function createStars() {
+        if (!starfield) return;
+
+        const count = Math.min(130, Math.max(70, Math.floor((window.innerWidth * window.innerHeight) / 11000)));
+        starfield.innerHTML = "";
+
+        for (let i = 0; i < count; i++) {
+          const star = document.createElement("div");
+          const size = Math.random() * 2 + 1;
+          star.className = "star";
+          star.style.left = `${Math.random() * 100}%`;
+          star.style.top = `${Math.random() * 100}%`;
+          star.style.width = `${size}px`;
+          star.style.height = `${size}px`;
+          star.style.animationDelay = `${Math.random() * 3}s`;
+          star.style.animationDuration = `${2 + Math.random() * 3}s`;
+          starfield.appendChild(star);
+        }
+      }
+
+      function setStatus(message, type = "") {
+        status.textContent = message;
+        status.className = `playtest-form__status${type ? ` is-${type}` : ""}`;
+      }
+
+      createStars();
+      window.addEventListener("resize", createStars);
+
+      if (!form || !submit || !status) return;
+
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+
+        if (formData.get("website")) {
+          setStatus("Thanks, you're on the list.", "success");
+          return;
+        }
+
+        submit.disabled = true;
+        setStatus("Saving your spot...");
+
+        try {
+          const res = await fetch(PLAYTEST_SIGNUP_ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: formData.get("email"),
+              playtest: formData.get("playtest"),
+              source: "anicable.com/playtest",
+              page: window.location.href,
+              submittedAt: new Date().toISOString()
+            })
+          });
+
+          if (!res.ok) {
+            throw new Error(`Signup failed: ${res.status}`);
+          }
+
+          localStorage.setItem(PLAYTEST_STORAGE_KEY, "signed-up");
+          setStatus("You're on the list. I'll send the key details before the playtest.", "success");
+          form.reset();
+        } catch (err) {
+          console.error("Playtest signup failed:", err);
+          setStatus("Something went wrong. Please try again in a minute.", "error");
+        } finally {
+          submit.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
