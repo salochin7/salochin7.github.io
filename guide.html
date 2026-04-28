@@ -85,7 +85,7 @@
     }
 
     .subtitle {
-      max-width: 650px;
+      max-width: 700px;
       margin: 18px auto 0;
       color: rgba(255,255,255,0.78);
       font-size: 1.1rem;
@@ -138,10 +138,18 @@
       text-shadow: 0 0 15px rgba(0, 170, 255, 0.35);
     }
 
-    .control-grid {
+    .control-grid,
+    .info-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
+    }
+
+    .control-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .info-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .control-box,
@@ -164,9 +172,10 @@
       color: #ffb36b;
     }
 
-    .controls p {
+    .control-box p {
       margin: 9px 0;
       color: rgba(255,255,255,0.82);
+      line-height: 1.55;
     }
 
     .controls strong {
@@ -233,6 +242,15 @@
       background: rgba(0, 150, 255, 0.13);
     }
 
+    .tip p {
+      margin: 0 0 14px;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .tip p:last-child {
+      margin-bottom: 0;
+    }
+
     .footer {
       padding: 40px 0;
       color: rgba(255,255,255,0.45);
@@ -250,7 +268,7 @@
       }
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 840px) {
       .container {
         padding: 18px;
       }
@@ -259,7 +277,8 @@
         min-height: 45vh;
       }
 
-      .control-grid {
+      .control-grid,
+      .info-grid {
         grid-template-columns: 1fr;
       }
 
@@ -286,21 +305,20 @@
 
 <body>
   <div class="container">
-
     <header class="hero">
       <div class="hero-inner">
         <h1>PHASER</h1>
         <p class="subtitle">
-          Game guide for surviving longer, upgrading smarter, and staying alive against increasingly dangerous waves of enemies.
+          Current guide for the live build: controls, progression, safe zones, modules, and the enemies that start showing up as your level climbs.
         </p>
 
         <div class="button-row">
           <a class="button" href="https://phaser.anicable.com" target="_blank" rel="noopener noreferrer">
-            ▶ Play Phaser
+            Play Phaser
           </a>
 
           <a class="button secondary" href="/">
-            ← Back to Anicable Studios
+            Back to Anicable Studios
           </a>
         </div>
       </div>
@@ -313,21 +331,54 @@
         <div class="control-box">
           <h3>Desktop</h3>
           <div class="controls">
-            <p><strong>Move:</strong> WASD</p>
-            <p><strong>Fire:</strong> Left Click</p>
-            <p><strong>Exit Station:</strong> E</p>
-            <p><strong>Pause / Settings:</strong> ESC</p>
+            <p><strong>Move:</strong> WASD or Arrow Keys</p>
+            <p><strong>Aim:</strong> Mouse cursor</p>
+            <p><strong>Fire:</strong> Hold Left Click or press Enter</p>
+            <p><strong>Dock / Undock:</strong> E</p>
+            <p><strong>Pause / Settings:</strong> Esc</p>
           </div>
         </div>
 
         <div class="control-box">
           <h3>Mobile</h3>
           <div class="controls">
-            <p><strong>Move:</strong> Tap and drag on the left side of the screen.</p>
-            <p><strong>Fire / Aim:</strong> Tap and drag on the right side of the screen.</p>
-            <p><strong>Exit Station:</strong> Exit button in the bottom right.</p>
-            <p><strong>Pause / Settings:</strong> Pause button in the top right.</p>
+            <p><strong>Move:</strong> Left joystick</p>
+            <p><strong>Aim / Fire:</strong> Right joystick auto-fires while you aim</p>
+            <p><strong>Dock / Undock:</strong> Exit button while docked</p>
+            <p><strong>Pause / Settings:</strong> Pause button in the top right</p>
           </div>
+        </div>
+
+        <div class="control-box">
+          <h3>Gamepad</h3>
+          <div class="controls">
+            <p><strong>Move:</strong> Left stick</p>
+            <p><strong>Aim:</strong> Right stick</p>
+            <p><strong>Fire:</strong> Right trigger</p>
+            <p><strong>Dock / Undock:</strong> Y / North button</p>
+            <p><strong>Pause / Settings:</strong> Select</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Progression Loop</h2>
+
+      <div class="info-grid">
+        <div class="control-box">
+          <h3>Rings</h3>
+          <p>Flying through a live ring gives you <strong>100 score</strong>, <strong>3 XP</strong>, and a short movement boost. Rings re-arm after a delay, so clean routes pay off.</p>
+        </div>
+
+        <div class="control-box">
+          <h3>Cash</h3>
+          <p>Destroying enemies and breaking asteroids can award cash. Cash fuels station upgrades and forge module purchases during a run.</p>
+        </div>
+
+        <div class="control-box">
+          <h3>Scaling</h3>
+          <p>Enemy pressure ramps with your <strong>level</strong>. Harder enemy tiers gain more spawn weight over time, so early XP routes speed up both your power and the danger.</p>
         </div>
       </div>
     </section>
@@ -336,26 +387,26 @@
       <h2>Enemies</h2>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/9891b6c2-ace0-409c-b4bc-6f969d715aac" alt="Arrow enemy" />
+        <img src="/images/phaser-guide/arrow.png" alt="Arrow enemy" />
         <div>
           <strong>Arrow</strong>
-          <p>Basic enemy that aggressively follows and rams your ship.</p>
+          <p>Fast pursuit ship that accelerates into ramming attacks. It is the most direct threat and gets dangerous fast in groups.</p>
         </div>
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/c066228f-5475-4a61-8731-768ab0ea2a67" alt="Zoid enemy" />
+        <img src="/images/phaser-guide/zoid.png" alt="Zoid enemy" />
         <div>
           <strong>Zoid</strong>
-          <p>Keeps distance and attacks from afar with ranged shots.</p>
+          <p>Mid-range gunship that tries to hold distance and fires parallel shot spreads at you.</p>
         </div>
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/e9e58c33-f2f9-4c30-a9e9-3f818b4e470d" alt="Kite enemy" />
+        <img src="/images/phaser-guide/kite.png" alt="Kite enemy" />
         <div>
           <strong>Kite</strong>
-          <p>Sniper enemy with one powerful shot that charges up before firing.</p>
+          <p>Long-range sniper that charges before firing a larger, harder-hitting shot. Break line and change angle when you see it set up.</p>
         </div>
       </div>
     </section>
@@ -364,67 +415,109 @@
       <h2>Power Ups</h2>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/4ff2e662-de91-4497-8d7c-5e43d30a93ef" alt="Shield power up" />
+        <img src="/images/phaser-guide/shield.png" alt="Shield power up" />
         <div>
           <strong>Shield</strong>
-          <p>Blocks all incoming damage — except from black holes.</p>
+          <p>Turns on temporary damage immunity for five seconds. It blocks hits, but it does not stop black holes from pulling your ship around.</p>
         </div>
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/7675bc68-71be-4c21-87d3-e29f3f24727a" alt="Health Pack power up" />
+        <img src="/images/phaser-guide/health-pack.png" alt="Health Pack power up" />
         <div>
           <strong>Health Pack</strong>
-          <p>Heals your ship!</p>
+          <p>Restores 50 health, up to your current max hull.</p>
         </div>
       </div>
 
+      <div class="card">
+        <img src="/images/phaser-guide/energy.png" alt="Speed Boost power up" />
+        <div>
+          <strong>Speed Boost</strong>
+          <p>The current power-up set still includes a temporary speed boost effect for fast repositioning and escape windows.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="/images/phaser-guide/xp.png" alt="Double Score power up" />
+        <div>
+          <strong>Double Score</strong>
+          <p>The live power-up list also includes a temporary score multiplier effect.</p>
+        </div>
+      </div>
     </section>
 
     <section class="section">
-      <h2>Objects & Obstacles</h2>
+      <h2>Safe Zones</h2>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/96fbf09a-282c-4433-8a70-fc8eb8070f6e" alt="Station" />
+        <img src="/images/phaser-guide/station.png" alt="Station" />
         <div>
           <strong>Station</strong>
-          <p>Upgrade your ship and recover inside a temporary safe zone.</p>
+          <p>Dock to open the classic upgrade menu. Stations heal you gradually, defend their zone, and only have a limited amount of repair material before they run dry.</p>
         </div>
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/ae486dad-a87d-4ad3-b6fc-ad0ddcd293a3" alt="Ring" />
+        <img src="/images/phaser-guide/forge.png" alt="Forge" />
         <div>
-          <strong>Rings</strong>
-          <p>Fly through them to gain experience and receive a speed boost.</p>
+          <strong>Forge</strong>
+          <p>Docking opens the forge menu. Its pulse field fully heals you on first entry, damages enemies in the zone, breaks asteroids, and shrinks black holes.</p>
         </div>
       </div>
 
       <div class="card">
-        <img src="https://github.com/user-attachments/assets/21580670-d3a1-4211-8ab4-1df040b28e58" alt="Black hole" />
+        <img src="/images/phaser-guide/ring.png" alt="Forge visit note" />
         <div>
-          <strong>Black Holes</strong>
-          <p>Extremely dangerous — avoid them or use them to slingshot across space.</p>
+          <strong>One Purchase Per Forge Visit</strong>
+          <p>After you buy a module at a forge, it kicks you back into space and starts drifting away. Pick your forge timing carefully.</p>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <h2>Tips</h2>
+      <h2>Ship Forge</h2>
+
+      <div class="card">
+        <img src="/images/phaser-guide/black-hole.png" alt="Black Hole Blaster module" />
+        <div>
+          <strong>Black Hole Blaster</strong>
+          <p>Forge module path for compact singularity firepower and stronger space-control options.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="/images/phaser-guide/extra-blaster.png" alt="Extra Blaster module" />
+        <div>
+          <strong>Extra Blaster</strong>
+          <p>Adds the upgraded blaster mount and switches your weapon into a stronger multi-shot pattern.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="/images/phaser-guide/energy.png" alt="Thrusters module" />
+        <div>
+          <strong>Thrusters</strong>
+          <p>Improves acceleration and handling, which helps with ring chains, evasive movement, and recovery after near-misses.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Hazards & Tips</h2>
 
       <div class="tip">
-        ✔ Keep moving — staying still makes you an easy target.<br><br>
-        ✔ Use rings early to level up faster.<br><br>
-        ✔ Visit stations often to upgrade before difficulty spikes.<br><br>
-        ✔ Use black holes strategically for speed boosts, but do not get too close.<br><br>
-        ✔ Prioritize avoiding damage over chasing enemies.
+        <p><strong>Black holes</strong> pull players gently and enemies much harder. They can clear pressure for you if enemies drift across them, but direct contact still swallows ships.</p>
+        <p><strong>Asteroids</strong> damage both players and enemies, then break into chunks. They are also free value when a station or forge safe zone clears them for you.</p>
+        <p><strong>Rings first, shopping second</strong> is usually the cleanest early route. Fast XP is strong, but it also speeds up the enemy pool.</p>
+        <p><strong>Dock on purpose.</strong> Stations are for steady recovery and stat upgrades. Forges are for module spikes and will eject you after a purchase.</p>
+        <p><strong>Death is expensive.</strong> Cash is reset when your ship is destroyed, so spend it before a risky overextension whenever you can.</p>
       </div>
     </section>
 
     <footer class="footer">
-      Anicable Studios · Phaser Game Guide
+      Anicable Studios | Phaser Game Guide
     </footer>
-
   </div>
 </body>
 </html>
