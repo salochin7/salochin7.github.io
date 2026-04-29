@@ -374,13 +374,14 @@
   throw new Error(`Signup failed: ${res.status}`);
 }
 
-// ✅ Fire GA event AFTER confirmed success
-        if (typeof gtag === "function") {
-          gtag("event", "playtest_signup", {
-            method: "playtest_form",
-            page_location: window.location.href
-          });
-        }
+        if (typeof gtag === "function" && !localStorage.getItem("ga_playtest_tracked")) {
+        gtag("event", "playtest_signup", {
+          method: "playtest_form",
+          page_location: window.location.href
+        });
+
+        localStorage.setItem("ga_playtest_tracked", "true");
+      }
 
         localStorage.setItem(PLAYTEST_STORAGE_KEY, "signed-up");
         setStatus("You're on the list. I'll send the key details before the playtest.", "success");
