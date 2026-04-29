@@ -281,6 +281,7 @@ function gtag_report_conversion() {
   });
 }
 </script>
+<!-- Event snippet for Playtest Signup conversion page In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. --> <script> function gtag_report_conversion(url) { var callback = function () { if (typeof(url) != 'undefined') { window.location = url; } }; gtag('event', 'conversion', { 'send_to': 'AW-18118362537/pHCDCJGi2aQcEKmLwb9D', 'event_callback': callback }); return false; } </script>
 <body>
   <div id="starfield" aria-hidden="true"></div>
 
