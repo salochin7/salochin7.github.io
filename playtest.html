@@ -274,6 +274,13 @@
   gtag('config', 'G-P5F9QEDTVM');
   gtag('config', 'AW-18118362537');
 </script>
+<script>
+function gtag_report_conversion() {
+  gtag('event', 'conversion', {
+    'send_to': 'AW-18118362537/pHCDCJGi2aQcEKmLwb9D'
+  });
+}
+</script>
 <body>
   <div id="starfield" aria-hidden="true"></div>
 
@@ -384,11 +391,16 @@
   throw new Error(`Signup failed: ${res.status}`);
 }
 
-        if (typeof gtag === "function" && !localStorage.getItem("ga_playtest_tracked")) {
+       if (typeof gtag === "function" && !localStorage.getItem("ga_playtest_tracked")) {
+
+        // GA4 event
         gtag("event", "playtest_signup", {
           method: "playtest_form",
           page_location: window.location.href
         });
+
+        // Google Ads conversion
+        gtag_report_conversion();
 
         localStorage.setItem("ga_playtest_tracked", "true");
       }
