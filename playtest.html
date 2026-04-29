@@ -371,12 +371,20 @@
           });
 
           if (!res.ok) {
-            throw new Error(`Signup failed: ${res.status}`);
-          }
+  throw new Error(`Signup failed: ${res.status}`);
+}
 
-          localStorage.setItem(PLAYTEST_STORAGE_KEY, "signed-up");
-          setStatus("You're on the list. I'll send the key details before the playtest.", "success");
-          form.reset();
+// ✅ Fire GA event AFTER confirmed success
+        if (typeof gtag === "function") {
+          gtag("event", "playtest_signup", {
+            method: "playtest_form",
+            page_location: window.location.href
+          });
+        }
+
+        localStorage.setItem(PLAYTEST_STORAGE_KEY, "signed-up");
+        setStatus("You're on the list. I'll send the key details before the playtest.", "success");
+        form.reset();
         } catch (err) {
           console.error("Playtest signup failed:", err);
           setStatus("Something went wrong. Please try again in a minute.", "error");
