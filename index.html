@@ -817,7 +817,7 @@ setInterval(updateCooldownUI, 1000);
       }
 
       if (!localStorage.getItem(PLAYTEST_STORAGE_KEY)) {
-        setTimeout(openModal, 900);
+        // uncomment to enable popup modal - setTimeout(openModal, 900);
       }
 
       closeButtons.forEach(button => {
